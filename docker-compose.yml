@@ -1,0 +1,7 @@
+vgf:
+  build: .
+  volumes:
+  - ./grav-admin:/var/www/html
+  ports:
+  - 8080:8080
+  - 8433:443

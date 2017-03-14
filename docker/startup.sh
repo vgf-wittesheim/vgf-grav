@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-$STARTUPDIR/set_user_permission.sh
+#$STARTUPDIR/set_user_permission.sh
 
 MY_IP=$(hostname -i)
 PORT=8080
