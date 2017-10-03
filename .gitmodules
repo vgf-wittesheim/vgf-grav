@@ -1,0 +1,3 @@
+[submodule "vgf-content"]
+	path = grav-admin/user
+	url = git@github.com:vgf-wittesheim/vgf-content.git
