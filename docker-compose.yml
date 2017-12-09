@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
-#    volumes:
-#    - ./grav-admin:/opt/appserver/deploy/grav-admin
+    volumes:
+    - ./grav-admin:/var/www/grav
     ports:
     - 8080:80
 #    - 8433:443
