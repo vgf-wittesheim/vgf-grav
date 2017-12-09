@@ -1,7 +1,12 @@
-vgf:
-  build: .
-  volumes:
-  - ./grav-admin:/var/www/html
-  ports:
-  - 8080:8080
-  - 8433:443
+version: '3'
+
+services:
+  vgf_nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+#    volumes:
+#    - ./grav-admin:/opt/appserver/deploy/grav-admin
+    ports:
+    - 8080:80
+#    - 8433:443
