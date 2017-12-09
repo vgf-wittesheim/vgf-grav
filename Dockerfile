@@ -23,6 +23,7 @@ EXPOSE 8080 443
 ENV STARTUPDIR /docker-startup
 ADD ./docker $STARTUPDIR
 RUN find  $STARTUPDIR -name '*.sh' -exec chmod a+x {} +
+RUN apk add --no-cache git
 USER 1000
 
 CMD /docker-startup/startup.sh
