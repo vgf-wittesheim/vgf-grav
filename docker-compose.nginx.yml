@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  vgf_nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    volumes:
+    - ./grav-admin:/var/www/grav
+#    user: "1000"
+    ports:
+    - 8080:80
+#    - 8433:443
