@@ -1,3 +1,4 @@
+
 # By commandline (do only as root to hide passwords)
 
     curlftpfs <user>:<pw>@<ftp-server>  ~tschneck/git-files/vgf/vgf-ftp-mount -o allow_other,disable_eprt,tlsv1 -o uid=1000 -o gid=1000
@@ -15,3 +16,8 @@
     fusermount -u /home/tschneck/git-files/vgf/vgf-ftp-mount
 
 
+# Sync content via `rsync`
+
+    rsync --dry-run -avz --delete-after --exclude=backup/* --exclude=cache/* --exclude=log*/ . /home/tschneck/git-files/vgf/vgf-grav/grav-admin/    
+
+ **NOTE:** remove `dry-run` to really copy
