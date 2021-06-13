@@ -10,6 +10,7 @@ RUN apt-get update -y \
 
 #Get Grav
 COPY ngix/nginx.conf /etc/nginx/nginx.conf
+COPY ngix/ssl.conf /etc/nginx/ssl.conf
 COPY ngix/nginx.grave-site.conf /etc/nginx/sites-available/grav-site
 RUN mkdir -p /etc/nginx/sites-enabled \
     && ln -s /etc/nginx/sites-available/grav-site /etc/nginx/sites-enabled/grav-site \
