@@ -1,4 +1,5 @@
 <?php
+
 namespace RocketTheme\Toolbox\StreamWrapper;
 
 /**
@@ -7,11 +8,14 @@ namespace RocketTheme\Toolbox\StreamWrapper;
  */
 class StreamBuilder
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $items = [];
 
+    /**
+     * StreamBuilder constructor.
+     * @param string[] $items
+     * @throws \InvalidArgumentException
+     */
     public function __construct(array $items = [])
     {
         foreach ($items as $scheme => $handler) {
@@ -20,21 +24,21 @@ class StreamBuilder
     }
 
     /**
-     * @param $scheme
-     * @param $handler
+     * @param string $scheme
+     * @param string $handler
      * @return $this
      * @throws \InvalidArgumentException
      */
     public function add($scheme, $handler)
     {
         if (isset($this->items[$scheme])) {
-            if ($handler == $this->items[$scheme]) {
+            if ($handler === $this->items[$scheme]) {
                 return $this;
             }
             throw new \InvalidArgumentException("Stream '{$scheme}' has already been initialized.");
         }
 
-        if (!is_subclass_of($handler, 'RocketTheme\Toolbox\StreamWrapper\StreamInterface')) {
+        if (!is_subclass_of($handler, StreamInterface::class)) {
             throw new \InvalidArgumentException("Stream '{$scheme}' has unknown or invalid type.");
         }
 
@@ -48,7 +52,7 @@ class StreamBuilder
     }
 
     /**
-     * @param $scheme
+     * @param string $scheme
      * @return $this
      */
     public function remove($scheme)
@@ -70,7 +74,7 @@ class StreamBuilder
     }
 
     /**
-     * @param $scheme
+     * @param string $scheme
      * @return bool
      */
     public function isStream($scheme)
@@ -79,8 +83,8 @@ class StreamBuilder
     }
 
     /**
-     * @param $scheme
-     * @return null
+     * @param string $scheme
+     * @return StreamInterface|null
      */
     public function getStreamType($scheme)
     {

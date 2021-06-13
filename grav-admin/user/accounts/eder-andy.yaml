@@ -1,0 +1,18 @@
+state: enabled
+_json:
+  avatar: 'null'
+  state: '"enabled"'
+email: eder-andy@t-online.de
+fullname: 'Andy Eder'
+title: 'Andy Eder'
+language: de
+twofa_enabled: false
+twofa_secret: 6LTYXMRWHP6HRIRVNM3XMESG6AH3RN3E
+access:
+  admin:
+    login: 'true'
+    pages: 'true'
+    statistics: 'true'
+  admin-addon-user-manager: {  }
+hashed_password: $2y$10$RcsP2hb4ZBZumvYbylPbf.oDzB/P5XW4WEAQzGiK6Jfa8tbO2AUvS
+login_attempts: {  }

@@ -1,16 +1,20 @@
 <?php
+
 /**
  * @package    Grav\Framework\Cache
  *
- * @copyright  Copyright (C) 2015 - 2018 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2021 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
 namespace Grav\Framework\Cache\Adapter;
 
+use DateInterval;
 use Grav\Framework\Cache\AbstractCache;
 use Grav\Framework\Cache\CacheInterface;
 use Grav\Framework\Cache\Exception\InvalidArgumentException;
+use function count;
+use function get_class;
 
 /**
  * Cache class for PSR-16 compatible "Simple Cache" implementation using chained cache adapters.
@@ -19,21 +23,17 @@ use Grav\Framework\Cache\Exception\InvalidArgumentException;
  */
 class ChainCache extends AbstractCache
 {
-    /**
-     * @var array|CacheInterface[]
-     */
+    /** @var CacheInterface[] */
     protected $caches;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $count;
 
     /**
      * Chain Cache constructor.
      * @param array $caches
-     * @param null|int|\DateInterval $defaultLifetime
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @param null|int|DateInterval $defaultLifetime
+     * @throws \Psr\SimpleCache\InvalidArgumentException|InvalidArgumentException
      */
     public function __construct(array $caches, $defaultLifetime = null)
     {
@@ -120,6 +120,7 @@ class ChainCache extends AbstractCache
         while ($i--) {
             $success = $this->caches[$i]->doClear() && $success;
         }
+
         return $success;
     }
 
@@ -129,6 +130,10 @@ class ChainCache extends AbstractCache
     public function doGetMultiple($keys, $miss)
     {
         $list = [];
+        /**
+         * @var int $i
+         * @var CacheInterface $cache
+         */
         foreach ($this->caches as $i => $cache) {
             $list[$i] = $cache->doGetMultiple($keys, $miss);
 
@@ -139,8 +144,12 @@ class ChainCache extends AbstractCache
             }
         }
 
-        $values = [];
         // Update all the previous caches with missing values.
+        $values = [];
+        /**
+         * @var int $i
+         * @var CacheInterface $items
+         */
         foreach (array_reverse($list) as $i => $items) {
             $values += $items;
             if ($i && $values) {

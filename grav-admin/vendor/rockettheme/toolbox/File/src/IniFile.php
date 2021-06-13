@@ -1,4 +1,5 @@
 <?php
+
 namespace RocketTheme\Toolbox\File;
 
 /**
@@ -10,26 +11,34 @@ namespace RocketTheme\Toolbox\File;
  */
 class IniFile extends File
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $extension = '.ini';
 
+    /** @var static[] */
+    static protected $instances = [];
+
     /**
-     * @var array|File[]
+     * @param array|null $var
+     * @return array
      */
-    static protected $instances = array();
+    public function content($var = null)
+    {
+        /** @var array $content */
+        $content = parent::content($var);
+
+        return $content;
+    }
 
     /**
      * Check contents and make sure it is in correct format.
      *
-     * @param array $var
+     * @param mixed $var
      * @return array
      * @throws \RuntimeException
      */
     protected function check($var)
     {
-        if (!is_array($var)) {
+        if (!\is_array($var)) {
             throw new \RuntimeException('Provided data is not an array');
         }
 
@@ -65,12 +74,12 @@ class IniFile extends File
      */
     protected function decode($var)
     {
-        $var = file_exists($this->filename) ? @parse_ini_file($this->filename) : [];
+        $decoded = null !== $this->filename && file_exists($this->filename) ? @parse_ini_file($this->filename) : [];
 
-        if ($var === false) {
+        if ($decoded === false) {
             throw new \RuntimeException("Decoding file '{$this->filename}' failed'");
         }
 
-        return $var;
+        return $decoded;
     }
 }

@@ -1,0 +1,17 @@
+enabled: false
+text_var: 'Custom Text added by the **Git Sync** plugin (disable plugin to remove)'
+folders:
+  - pages
+user: grandmastertobi@gmx.de
+password: gitsync-def50200fb81b7a62774a580b9b7884934384fd5ebcd50632198a1adeed5f09c726a85e52bf7dc74b8d357dc30095b3b69e8d00d4508a7ca911c00ce949f33647c42a53d41b7ab2bf54e64f5e9d03bdaf628784e2cefc34d16c3ee42a056a9d1589423b9cc6de770
+webhook: /_git-sync
+branch: master
+remote:
+  name: origin
+  branch: master
+git:
+  author: gituser
+  name: GitSync
+  email: git-sync@trilby.media
+  bin: git
+logging: false

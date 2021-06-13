@@ -21,6 +21,9 @@ form:
           title: PLUGIN_ADMIN.CONTENT
 
           fields:
+            xss_check:
+              type: xss
+
             header.title:
               type: text
               autofocus: true
@@ -118,7 +121,7 @@ form:
                       underline: true
 
                     folder:
-                      type: text
+                      type: folder-slug
                       label: PLUGIN_ADMIN.FOLDER_NAME
                       validate:
                         rule: slug

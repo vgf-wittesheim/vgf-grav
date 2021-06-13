@@ -1,12 +1,17 @@
 <?php
+
 /**
  * @package    Grav\Framework\Object
  *
- * @copyright  Copyright (C) 2015 - 2018 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2021 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
 namespace Grav\Framework\Object\Base;
+
+use Grav\Framework\Compat\Serializable;
+use InvalidArgumentException;
+use function get_class;
 
 /**
  * Object trait.
@@ -15,13 +20,21 @@ namespace Grav\Framework\Object\Base;
  */
 trait ObjectTrait
 {
-    static protected $prefix;
-    static protected $type;
+    use Serializable;
+
+    /** @var string */
+    protected static $type;
+
+    /** @var string */
+    private $_key;
 
     /**
-     * @var string
+     * @return string
      */
-    private $_key;
+    protected function getTypePrefix()
+    {
+        return '';
+    }
 
     /**
      * @param bool $prefix
@@ -29,12 +42,14 @@ trait ObjectTrait
      */
     public function getType($prefix = true)
     {
+        $type = $prefix ? $this->getTypePrefix() : '';
+
         if (static::$type) {
-            return ($prefix ? static::$prefix : '') . static::$type;
+            return $type . static::$type;
         }
 
         $class = get_class($this);
-        return ($prefix ? static::$prefix : '') . strtolower(substr($class, strrpos($class, '\\') + 1));
+        return $type . strtolower(substr($class, strrpos($class, '\\') + 1));
     }
 
     /**
@@ -42,7 +57,15 @@ trait ObjectTrait
      */
     public function getKey()
     {
-        return $this->_key ?: $this->getType() . '@' . spl_object_hash($this);
+        return $this->_key ?: $this->getType() . '@@' . spl_object_hash($this);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasKey()
+    {
+        return !empty($this->_key);
     }
 
     /**
@@ -66,7 +89,7 @@ trait ObjectTrait
 
     /**
      * @param string $property      Object property to be updated.
-     * @param string $value         New value.
+     * @param mixed  $value         New value.
      * @return $this
      */
     public function setProperty($property, $value)
@@ -102,35 +125,42 @@ trait ObjectTrait
     }
 
     /**
-     * Implements Serializable interface.
-     *
-     * @return string
+     * @return array
      */
-    public function serialize()
+    final public function __serialize(): array
     {
-        return serialize($this->jsonSerialize());
+        return $this->doSerialize();
     }
 
     /**
-     * @param string $serialized
+     * @param array $data
+     * @return void
      */
-    public function unserialize($serialized)
+    final public function __unserialize(array $data): void
     {
-        $data = unserialize($serialized);
-
         if (method_exists($this, 'initObjectProperties')) {
             $this->initObjectProperties();
         }
+
         $this->doUnserialize($data);
     }
 
     /**
+     * @return array
+     */
+    protected function doSerialize()
+    {
+        return ['key' => $this->getKey(), 'type' => $this->getType(), 'elements' => $this->getElements()];
+    }
+
+    /**
      * @param array $serialized
+     * @return void
      */
     protected function doUnserialize(array $serialized)
     {
         if (!isset($serialized['key'], $serialized['type'], $serialized['elements']) || $serialized['type'] !== $this->getType()) {
-            throw new \InvalidArgumentException("Cannot unserialize '{$this->getType()}': Bad data");
+            throw new InvalidArgumentException("Cannot unserialize '{$this->getType()}': Bad data");
         }
 
         $this->setKey($serialized['key']);
@@ -144,7 +174,7 @@ trait ObjectTrait
      */
     public function jsonSerialize()
     {
-        return ['key' => $this->getKey(), 'type' => $this->getType(), 'elements' => $this->getElements()];
+        return $this->doSerialize();
     }
 
     /**
@@ -159,16 +189,12 @@ trait ObjectTrait
 
     /**
      * @param string $key
+     * @return $this
      */
     protected function setKey($key)
     {
         $this->_key = (string) $key;
-    }
 
-    abstract protected function doHasProperty($property);
-    abstract protected function &doGetProperty($property, $default = null, $doCreate = false);
-    abstract protected function doSetProperty($property, $value);
-    abstract protected function doUnsetProperty($property);
-    abstract protected function getElements();
-    abstract protected function setElements(array $elements);
+        return $this;
+    }
 }

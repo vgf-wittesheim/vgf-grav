@@ -1,0 +1,5 @@
+enabled: true
+css_files:
+  -
+    path: user/vgf_css/vgf.css
+    priority: 0

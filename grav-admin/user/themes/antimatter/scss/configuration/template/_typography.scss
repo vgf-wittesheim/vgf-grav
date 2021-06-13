@@ -1,0 +1,29 @@
+// Font Family
+$font-family-default:  			"Raleway", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+$font-family-header:  			"Montserrat", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+$font-family-mono: 				"Inconsolata", monospace;
+$font-family-serif:				"Georgia", "Times", "Times New Roman", serif;
+
+$icons: 						"FontAwesome";
+
+//changed4vgf:: start
+
+//@font-face {
+//  font-family: 'FunSized';
+//  src: url('../../../fonts/fun-sized.ttf')  format('truetype'); /*URL to font*/
+//}
+//
+//@font-face {
+//  font-family: 'NationalCartoon';
+//  src: url('../../../fonts/national-cartoon.ttf') format('truetype'); /*URL to font*/
+//}
+//
+//@font-face {
+//  font-family: 'OrangeJuice';
+//  src: url('../../../fonts/orange-juice.ttf')  format('truetype'); /*URL to font*/
+//}
+//
+//$font-design: "FunSized";
+$font-design: $font-family-header;
+
+//changed4vgf:: end

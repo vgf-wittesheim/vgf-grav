@@ -1,0 +1,17 @@
+title: 'VGF Wittesheim'
+default_lang: de
+author:
+  name: 'Tobias Schneck'
+  email: grandmastertobi@gmx.de
+taxonomies:
+  - category
+  - tag
+metadata:
+  description: 'VGF Wittesheim - Sportlich - Aktive - Gesellig'
+summary:
+  enabled: true
+  format: short
+  size: 350
+  delimiter: '==='
+blog:
+  route: /blog

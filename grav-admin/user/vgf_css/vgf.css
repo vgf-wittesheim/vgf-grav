@@ -1,0 +1,57 @@
+div.flush-top.blog-header.blog-header-image {
+    background-image: none;
+}
+
+#header {
+    height: fit-content;
+}
+#header.scrolled {
+    height: fit-content;
+}
+
+/*remove marging of JPG links on page theather*/
+a > p[alt="JPG"] {
+    margin: auto
+}
+
+#header #logo img {
+    position: relative;
+    padding-right: 0.3em;
+    /*padding-top: 0.3em;*/
+    padding-bottom: 0.3em;
+    max-width: 30%;
+    vertical-align: middle;
+    max-height: 4rem;
+}
+
+#header #logo {
+    max-width: 80%;
+    height: fit-content;
+    padding-bottom: 1rem;
+}
+
+#header #logo h3 {
+    text-transform: none !important;
+    vertical-align: middle;
+    position: relative !important;
+    font-weight: bold;
+}
+
+
+#header.scrolled #logo img {
+    max-height: 3rem;
+}
+
+
+@media screen and (max-width: 400px) {
+    #header #logo h3 {
+        font-size: 1.4rem;
+    }
+    #header.scrolled #logo h3 {
+        font-size: 1.4rem !important;
+    }
+    #header #logo img {
+        max-width: unset;
+        width: 3.5rem;
+    }
+}

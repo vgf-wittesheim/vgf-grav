@@ -1,13 +1,15 @@
 <?php
+
 /**
  * @package    Grav\Framework\Cache
  *
- * @copyright  Copyright (C) 2015 - 2018 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2021 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
 namespace Grav\Framework\Cache\Adapter;
 
+use DateInterval;
 use Doctrine\Common\Cache\CacheProvider;
 use Grav\Framework\Cache\AbstractCache;
 use Grav\Framework\Cache\Exception\InvalidArgumentException;
@@ -18,9 +20,7 @@ use Grav\Framework\Cache\Exception\InvalidArgumentException;
  */
 class DoctrineCache extends AbstractCache
 {
-    /**
-     * @var CacheProvider
-     */
+    /** @var CacheProvider */
     protected $driver;
 
     /**
@@ -28,8 +28,8 @@ class DoctrineCache extends AbstractCache
      *
      * @param CacheProvider $doctrineCache
      * @param string $namespace
-     * @param null|int|\DateInterval $defaultLifetime
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @param null|int|DateInterval $defaultLifetime
+     * @throws \Psr\SimpleCache\InvalidArgumentException|InvalidArgumentException
      */
     public function __construct(CacheProvider $doctrineCache, $namespace = '', $defaultLifetime = null)
     {
@@ -38,7 +38,9 @@ class DoctrineCache extends AbstractCache
 
         // Set namespace to Doctrine Cache provider if it was given.
         $namespace = $this->getNamespace();
-        $namespace && $doctrineCache->setNamespace($namespace);
+        if ($namespace) {
+            $doctrineCache->setNamespace($namespace);
+        }
 
         $this->driver = $doctrineCache;
     }
@@ -96,20 +98,9 @@ class DoctrineCache extends AbstractCache
 
     /**
      * @inheritdoc
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function doDeleteMultiple($keys)
     {
-        // TODO: Remove when Doctrine Cache has been updated to support the feature.
-        if (!method_exists($this->driver, 'deleteMultiple')) {
-            $success = true;
-            foreach ($keys as $key) {
-                $success = $this->delete($key) && $success;
-            }
-
-            return $success;
-        }
-
         return $this->driver->deleteMultiple($keys);
     }
 

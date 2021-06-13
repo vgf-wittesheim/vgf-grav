@@ -1,8 +1,9 @@
 <?php
+
 /**
  * @package    Grav\Framework\Collection
  *
- * @copyright  Copyright (C) 2015 - 2018 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2021 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
@@ -12,6 +13,9 @@ namespace Grav\Framework\Collection;
  * Collection of objects stored into a filesystem.
  *
  * @package Grav\Framework\Collection
+ * @template TKey
+ * @template T
+ * @extends AbstractFileCollection<TKey,T>
  */
 class FileCollection extends AbstractFileCollection
 {

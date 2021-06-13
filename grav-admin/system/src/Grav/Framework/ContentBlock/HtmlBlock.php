@@ -1,12 +1,17 @@
 <?php
+
 /**
  * @package    Grav\Framework\ContentBlock
  *
- * @copyright  Copyright (C) 2015 - 2018 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2021 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
 namespace Grav\Framework\ContentBlock;
+
+use RuntimeException;
+use function is_array;
+use function is_string;
 
 /**
  * HtmlBlock
@@ -15,9 +20,15 @@ namespace Grav\Framework\ContentBlock;
  */
 class HtmlBlock extends ContentBlock implements HtmlBlockInterface
 {
+    /** @var int */
+    protected $version = 1;
+    /** @var array */
     protected $frameworks = [];
+    /** @var array */
     protected $styles = [];
+    /** @var array */
     protected $scripts = [];
+    /** @var array */
     protected $html = [];
 
     /**
@@ -72,7 +83,7 @@ class HtmlBlock extends ContentBlock implements HtmlBlockInterface
     }
 
     /**
-     * @return array[]
+     * @return array
      */
     public function toArray()
     {
@@ -96,7 +107,8 @@ class HtmlBlock extends ContentBlock implements HtmlBlockInterface
 
     /**
      * @param array $serialized
-     * @throws \RuntimeException
+     * @return void
+     * @throws RuntimeException
      */
     public function build(array $serialized)
     {
@@ -217,8 +229,8 @@ class HtmlBlock extends ContentBlock implements HtmlBlockInterface
 
         $src = $element['src'];
         $type = !empty($element['type']) ? (string) $element['type'] : 'text/javascript';
-        $defer = isset($element['defer']) ? true : false;
-        $async = isset($element['async']) ? true : false;
+        $defer = isset($element['defer']);
+        $async = isset($element['async']);
         $handle = !empty($element['handle']) ? (string) $element['handle'] : '';
 
         $this->scripts[$location][md5($src) . sha1($src)] = [
@@ -301,7 +313,7 @@ class HtmlBlock extends ContentBlock implements HtmlBlockInterface
         ];
 
         foreach ($this->blocks as $block) {
-            if ($block instanceof HtmlBlock) {
+            if ($block instanceof self) {
                 $blockAssets = $block->getAssetsFast();
                 $assets['frameworks'] += $blockAssets['frameworks'];
 
@@ -355,6 +367,7 @@ class HtmlBlock extends ContentBlock implements HtmlBlockInterface
 
     /**
      * @param array $items
+     * @return void
      */
     protected function sortAssetsInLocation(array &$items)
     {
@@ -366,15 +379,15 @@ class HtmlBlock extends ContentBlock implements HtmlBlockInterface
 
         uasort(
             $items,
-            function ($a, $b) {
-                return ($a[':priority'] === $b[':priority'])
-                    ? $a[':order'] - $b[':order'] : $a[':priority'] - $b[':priority'];
+            static function ($a, $b) {
+                return $a[':priority'] <=> $b[':priority'] ?: $a[':order'] <=> $b[':order'];
             }
         );
     }
 
     /**
      * @param array $array
+     * @return void
      */
     protected function sortAssets(array &$array)
     {

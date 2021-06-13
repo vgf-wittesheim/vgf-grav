@@ -1,0 +1,7 @@
+sass-watcher:
+  image: larryprice/sass
+  volumes:
+  - ./scss:/src
+  - ./css-compiled:/target
+  entrypoint: sass --watch /src:/target
+#  entrypoint: sass --help
